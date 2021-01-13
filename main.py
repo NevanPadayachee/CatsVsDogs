@@ -2,11 +2,11 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import urllib3
-urllib3.disable_warnings()
-keras=tf.keras
-
+#import urllib3
 import tensorflow_datasets as tfds
+
+#  urllib3.disable_warnings()
+keras=tf.keras
 tfds.disable_progress_bar()
 
 
@@ -14,14 +14,16 @@ tfds.disable_progress_bar()
 #splits data into 80% training 10% testing and 10% validation
 (raw_train, raw_validation, raw_test), metadata= tfds.load(
     'cats_vs_dogs',
-    split=['train[:80%]', 'train[80%:90%]', 'train[90%:]'],
+    split=[tfds.Split.TRAIN.subsplit(tfds.percent[:80]),
+    tfds.Split.TRAIN.subsplit(tfds.percent[80:90]),
+    tfds.Split.TRAIN.subsplit(tfds.percent[90:])],
     with_info=True,
     as_supervised=True
 )
 #creates function object to get labels
 get_label_name = metadata.features['label'].int2str
 
-for image, label in raw_train.take(6):
+for image, label in raw_train.take(1):
     plt.figure()
     plt.imshow(image)
     plt.title(get_label_name(label))
@@ -53,7 +55,7 @@ IMG_SHAPE = (IMG_SIZE, IMG_SIZE, 3)
 base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE, 
                                                include_top=False,
                                                weights= 'imagenet')
-base_model.summary()
+#base_model.summary()
 
 for image,_ in train_batches.take(1):
   pass
@@ -62,7 +64,7 @@ feature_batch= base_model(image)
 print(feature_batch.shape)
 
 base_model.trainable = False
-base_model.summary()
+#base_model.summary()
 
 global_average_layer = tf.keras.layers.GlobalAveragePooling2D()
 prediction_layer = keras.layers.Dense(1)
@@ -71,7 +73,7 @@ model = tf.keras.Sequential([
                              base_model, global_average_layer, prediction_layer
 ])
 
-model.summary()
+#model.summary()
 
 base_learning_rate=0.0001
 model.compile(optimizer=tf.keras.optimizers.RMSprop(lr=base_learning_rate),
