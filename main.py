@@ -94,3 +94,5 @@ print(acc)
 
 model.save("dogs_vs_cats.h5")
 new_model = tf.keras.models.load_model("dogs_vs_cats.h5")
+
+model.predict()
