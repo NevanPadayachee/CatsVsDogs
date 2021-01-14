@@ -3,15 +3,20 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import cv2 as cv
 
-keras=tf.keras
+keras = tf.keras
 
 model = keras.models.load_model('dogs_vs_cats.h5')
 
 tester = cv.imread('images/Dog1.jpg')
 picture = tester
-tester = tf.cast(tester, tf.float32)
-tester = (tester/127.5)-1
-tester = tf.image.resize(tester, (160, 160))
+def format_Image(image):
+    image = tf.cast(image, tf.float32)
+    image = (image / 127.5) - 1
+    image = tf.image.resize(image, (160, 160))
+    return image
+
+tester=format_Image(tester)
+
 
 input_image_array = np.array(tester)
 input_image_array = input_image_array[np.newaxis, :, :, :]
