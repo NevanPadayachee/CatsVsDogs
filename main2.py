@@ -7,7 +7,7 @@ keras = tf.keras
 
 model = keras.models.load_model('dogs_vs_cats.h5')
 
-tester = cv.imread('images/Dog1.jpg')
+tester = cv.imread('images/file.txt')
 picture = tester
 def format_Image(image):
     image = tf.cast(image, tf.float32)
@@ -24,13 +24,17 @@ input_image_array = input_image_array[np.newaxis, :, :, :]
 def DogOrCat(prediction):
     plt.imshow(picture)
 
-    if prediction <0:
-        cv.imshow('CAT', picture)
+    if prediction < -4:
+        #cv.imshow('CAT', picture)
         print('CAT')
-    else:
-        cv.imshow('DOG', picture)
+        print(prediction)
+    elif prediction > 1.5:
+        #cv.imshow('DOG', picture)
         print('DOG')
-    cv.waitKey(10000)
+        print(prediction)
+    else:
+        print("NEITHER")
+    #cv.waitKey(10000)
 
 DogOrCat(model.predict(input_image_array))
 
